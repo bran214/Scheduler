@@ -1,6 +1,6 @@
 public class Date {
-    int year;
-    int month;
-    int day;
-    int dayOfWeek;
+    private int year;
+    private int month;
+    private int day;
+    private int dayOfWeek;
 }

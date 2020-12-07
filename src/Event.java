@@ -1,6 +1,6 @@
 public class Event {
 
-    Date date;
-    Time time;
-    boolean isRepeating;
+    private Date date;
+    private Time time;
+    private boolean isRepeating;
 }

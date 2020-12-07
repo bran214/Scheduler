@@ -1,6 +1,8 @@
+import java.util.ArrayList;
+
 public class Schedule {
 
-    ArrayList<Event> events;
+    private ArrayList<Event> events;
 
     public void display() {
         //TODO

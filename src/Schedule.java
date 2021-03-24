@@ -5,7 +5,12 @@ public class Schedule {
     private ArrayList<Event> events = new ArrayList<>();
 
     public void display() {
-        System.out.println(events);
+        for (Event event : events) {
+            System.out.println(event.getStart().toString());
+            System.out.println("\t" + event.getName());
+            System.out.println(event.getEnd().toString());
+            System.out.println();
+        }
     }
 
     /**
@@ -27,8 +32,8 @@ public class Schedule {
             }
         }
         // After the chronologicalFirstEvent is determined, swap it with the first Event in the ArrayList
-        Event temp = events.get(0);
-        events.set(0, events.get(chronologicalFirstEventIndex));
+        Event temp = events.get(startIndex);
+        events.set(startIndex, events.get(chronologicalFirstEventIndex));
         events.set(chronologicalFirstEventIndex, temp);
         if (!(startIndex + 1 >= events.size())) {
             sortEvents(startIndex + 1);

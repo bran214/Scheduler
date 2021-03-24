@@ -9,20 +9,16 @@ public class Event {
     /** the date and time when the Event ends */
     private LocalDateTime end;
 
-    private boolean isRepeating;
-
     /**
      * Constructor for an Event given the name, starting time, ending time, and
      * @param name {@link #name}
      * @param start {@link #start}
      * @param end {@link #end}
-     * @param isRepeating
      */
-    public Event(String name, LocalDateTime start, LocalDateTime end, boolean isRepeating) {
+    public Event(String name, LocalDateTime start, LocalDateTime end) {
         this.name = name;
         this.start = start;
         this.end = end;
-        this.isRepeating = isRepeating;
     }
 
     public String getName() {

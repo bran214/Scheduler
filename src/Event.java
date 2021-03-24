@@ -2,16 +2,39 @@ import java.time.LocalDateTime;
 
 public class Event {
 
+    /** the name of the Event */
     private String name;
+    /** the date and time when the Event starts */
     private LocalDateTime start;
+    /** the date and time when the Event ends */
     private LocalDateTime end;
+
     private boolean isRepeating;
 
+    /**
+     * Constructor for an Event given the name, starting time, ending time, and
+     * @param name {@link #name}
+     * @param start {@link #start}
+     * @param end {@link #end}
+     * @param isRepeating
+     */
     public Event(String name, LocalDateTime start, LocalDateTime end, boolean isRepeating) {
         this.name = name;
         this.start = start;
         this.end = end;
         this.isRepeating = isRepeating;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
     }
 
     /**

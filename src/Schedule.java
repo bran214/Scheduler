@@ -19,6 +19,7 @@ public class Schedule implements Serializable {
 
     /**
      * Sorts all of the stored Events in the Schedule
+     * @deprecated
      */
     public void sortEvents() {
         sortEvents(0);

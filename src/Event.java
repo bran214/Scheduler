@@ -12,32 +12,17 @@ public class Event implements Serializable {
     private LocalDateTime start;
     /** the date and time when the Event ends */
     private LocalDateTime end;
-    /** whether or not the Event repeats every week */
-    private boolean repeatingWeekly;
-
-    /**
-     * Constructor for an Event given the name, starting time, ending time, but not if it repeats weekly.
-     * In this case, it creates an Event with the specified information and fills {@link #repeatingWeekly} as false
-     * @param name {@link #name}
-     * @param start {@link #start}
-     * @param end {@link #end}
-     */
-    public Event(String name, LocalDateTime start, LocalDateTime end) {
-        this(name, start, end, false);
-    }
 
     /**
      * Constructor for an Event given the name, starting time, ending time, and if it repeats weekly
      * @param name {@link #name}
      * @param start {@link #start}
      * @param end {@link #end}
-     * @param repeatingWeekly {@link #repeatingWeekly}
      */
-    public Event(String name, LocalDateTime start, LocalDateTime end, boolean repeatingWeekly) {
+    public Event(String name, LocalDateTime start, LocalDateTime end) {
         this.name = name;
         this.start = start;
         this.end = end;
-        this.repeatingWeekly = repeatingWeekly;
     }
 
     public String getName() {
@@ -50,10 +35,6 @@ public class Event implements Serializable {
 
     public LocalDateTime getEnd() {
         return end;
-    }
-
-    public boolean isRepeatingWeekly() {
-        return repeatingWeekly;
     }
 
     /**
@@ -79,28 +60,15 @@ public class Event implements Serializable {
         }
     }
 
-    /**
-     * Duplicates the Event a week later. Only works if the Event is repeating weekly.
-     */
-    public Event duplicateEvent() {
-        if (repeatingWeekly) {
-            return new Event(name, start.plusWeeks(1), end.plusWeeks(1), repeatingWeekly);
-        } else {
-            return null;
-        }
-    }
-
     private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
         this.name = in.readUTF();
         this.start = (LocalDateTime) in.readObject();
         this.end = (LocalDateTime) in.readObject();
-        this.repeatingWeekly = in.readBoolean();
     }
 
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeUTF(name);
         out.writeObject(start);
         out.writeObject(end);
-        out.writeBoolean(repeatingWeekly);
     }
 }

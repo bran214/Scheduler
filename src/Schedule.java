@@ -3,6 +3,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
@@ -10,13 +11,19 @@ public class Schedule implements Serializable {
 
     private ArrayList<Event> events = new ArrayList<>();
 
-    public void display() {
+    @Override
+    public String toString() {
+        String returnValue = "";
         for (Event event : events) {
-            System.out.println(event.getStart().toString());
-            System.out.println("\t" + event.getName());
-            System.out.println(event.getEnd().toString());
-            System.out.println();
+            returnValue += event.getStart().toString() + "\n\t" + event.getName() + "\n" + event.getEnd().toString() + "\n";
         }
+        return returnValue;
+    }
+
+    public ArrayList<Event> getEvents() {
+        ArrayList<Event> copyOfEvents = new ArrayList<>();
+        copyOfEvents.addAll(events);
+        return copyOfEvents;
     }
 
     /**
@@ -162,6 +169,15 @@ public class Schedule implements Serializable {
             }
         }
         return slots;
+    }
+
+    public Event issueNotification() {
+        for (Event event : events) {
+            if (LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).isEqual(event.getStart()) && !(event instanceof Break)) {
+                return event;
+            }
+        }
+        return null;
     }
 
     private void readObject(ObjectInputStream in) throws ClassNotFoundException, ClassCastException, IOException {

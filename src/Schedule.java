@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class Schedule implements Serializable {
@@ -77,21 +79,23 @@ public class Schedule implements Serializable {
         the unoptimized version still didn't complete even after 5 minutes.
      */
     public boolean attemptToAddEvent(Event event) {
-        System.out.println(events.size());
-        if (events.size() == 0) {
+        if (events.size() == 0) { // if there are no elements in events, automatically add it as there are no possible conflicts
             events.add(event);
             return true;
+        } else if (events.size() == 1) { // if there is only one element, this must be handled specially as events.size() - 1 is also equal to 0, which causes problems without this block
+            if (!event.isOverlapping(events.get(0))) {
+                if (event.getStart().isBefore(events.get(0).getStart())) {
+                    events.add(0, event);
+                    return true;
+                } else {
+                    events.add(event);
+                    return true;
+                }
+            }
         }
         for (int i = 0; i < events.size(); i++) {
-            if (i == 0 || i == events.size() - 1) { // if i is an endpoint, then it must be handled specially
-                if (i == 0 && event.getStart().isBefore(events.get(i).getStart())) { // if the event is before i and i is 0, it must go first
-                    if (!(event.isOverlapping(events.get(i)))) {
-                        events.add(i, event);
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else if (i == events.size() - 1 && event.getStart().isAfter(events.get(i).getStart())) { // if the event is after i and i is the last in events, it must go last
+            if (i == events.size() - 1) { // if i is last in the array, going to the next block will cause errors so it must be handled specially
+                if (event.getStart().isAfter(events.get(i).getStart())) {
                     if (!(event.isOverlapping(events.get(i)))) {
                         events.add(event);
                         return true;
@@ -99,7 +103,13 @@ public class Schedule implements Serializable {
                         return false;
                     }
                 }
-            } else if (event.getStart().isBefore(events.get(i + 1).getStart()) && event.getStart().isAfter(events.get(i).getStart())) { // if the event to be added is before the next event but after the current event
+            } else if ((event.getStart().isBefore(events.get(i + 1).getStart()) && event.getStart().isAfter(events.get(i).getStart())) || i == 0) { // if the event to be added is before the next event but after the current event or i is 0
+                if (i == 0 && event.getStart().isBefore(events.get(i).getStart())) { // if this is before any other event
+                    if (!(event.isOverlapping(events.get(i)))) {
+                        events.add(i, event);
+                        return true;
+                    }
+                }
                 if (!(event.isOverlapping(events.get(i + 1)) || event.isOverlapping(events.get(i)))) { // if the event doesn't overlap either of the other two events
                     events.add(i + 1, event); // add the event between the other two events
                     return true; // and return that the operation was successful
@@ -128,7 +138,33 @@ public class Schedule implements Serializable {
 //        return true;
 //    }
 
-    private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
+    /**
+     * Gives the positions at which a Duration can fit within the Schedule.
+     * @param duration the duration to fit in the Schedule
+     * @return an array of all the positions where the Duration fits
+     */
+    public ArrayList<Integer> availableSlots(Duration duration) {
+        duration = duration.truncatedTo(ChronoUnit.MINUTES);
+        ArrayList<Integer> slots = new ArrayList<>();
+        if (events.size() == 0) {
+            slots.add(0);
+        }
+        for (int i = 0; i < events.size(); i++) {
+            if (i == 0) {
+                slots.add(i);
+            }
+            if (i == events.size() - 1) {
+                slots.add(i + 1);
+            } else {
+                if (Duration.between(events.get(i).getEnd(), events.get(i + 1).getStart()).compareTo(duration) >= 0) {
+                    slots.add(i + 1);
+                }
+            }
+        }
+        return slots;
+    }
+
+    private void readObject(ObjectInputStream in) throws ClassNotFoundException, ClassCastException, IOException {
         events = (ArrayList<Event>) in.readObject();
     }
 

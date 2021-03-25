@@ -3,6 +3,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class Event implements Serializable {
 
@@ -21,8 +22,8 @@ public class Event implements Serializable {
      */
     public Event(String name, LocalDateTime start, LocalDateTime end) {
         this.name = name;
-        this.start = start;
-        this.end = end;
+        this.start = start.truncatedTo(ChronoUnit.MINUTES);
+        this.end = end.truncatedTo(ChronoUnit.MINUTES);
     }
 
     public String getName() {

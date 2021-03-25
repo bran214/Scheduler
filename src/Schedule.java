@@ -36,9 +36,27 @@ public class Schedule {
         events.set(startIndex, events.get(chronologicalFirstEventIndex));
         events.set(chronologicalFirstEventIndex, temp);
         if (!(startIndex + 1 >= events.size())) {
-            sortEvents(startIndex + 1);
+            sortEvents(startIndex + 1); // everything up to the startIndex is guaranteed to be sorted, so sort everything after
         }
     }
+
+//    /**
+//     * Iterative method to sort all of the stored Events in the Schedule.
+//     * This was deemed to be similarly efficient in terms of CPU usage and run time to the recursive method,
+//     * so the recursive method will be used due to better legibility.
+//     */
+//    public void sortEvents() {
+//        for (int i = 0; i < events.size(); i++) {
+//            int chronologicalFirstEventIndex = i;
+//            for (int j = i; j < events.size(); j++) {
+//                if (events.get(j).getStart().isBefore(events.get(chronologicalFirstEventIndex).getStart()))
+//                    chronologicalFirstEventIndex = j;
+//            }
+//            Event temp = events.get(i);
+//            events.set(i, events.get(chronologicalFirstEventIndex));
+//            events.set(chronologicalFirstEventIndex, temp);
+//        }
+//    }
 
     /**
      * Attempts to add an Event and returns if adding was successful.

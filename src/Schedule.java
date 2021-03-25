@@ -1,6 +1,10 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Schedule {
+public class Schedule implements Serializable {
 
     private ArrayList<Event> events = new ArrayList<>();
 
@@ -122,4 +126,12 @@ public class Schedule {
 //        sortEvents();
 //        return true;
 //    }
+
+    private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
+        events = (ArrayList<Event>) in.readObject();
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.writeObject(events);
+    }
 }

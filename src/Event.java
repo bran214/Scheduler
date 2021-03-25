@@ -1,6 +1,10 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Event {
+public class Event implements Serializable {
 
     /** the name of the Event */
     private String name;
@@ -84,5 +88,19 @@ public class Event {
         } else {
             return null;
         }
+    }
+
+    private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
+        this.name = in.readUTF();
+        this.start = (LocalDateTime) in.readObject();
+        this.end = (LocalDateTime) in.readObject();
+        this.repeatingWeekly = in.readBoolean();
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.writeUTF(name);
+        out.writeObject(start);
+        out.writeObject(end);
+        out.writeBoolean(repeatingWeekly);
     }
 }

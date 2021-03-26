@@ -1,0 +1,7 @@
+.event-button {
+    -fx-background-color: #006600;
+}
+
+.event-button:focused {
+    -fx-background-color: #00FF00;
+}

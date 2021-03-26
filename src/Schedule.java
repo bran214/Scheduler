@@ -21,9 +21,7 @@ public class Schedule implements Serializable {
     }
 
     public ArrayList<Event> getEvents() {
-        ArrayList<Event> copyOfEvents = new ArrayList<>();
-        copyOfEvents.addAll(events);
-        return copyOfEvents;
+        return events;
     }
 
     /**
@@ -117,11 +115,13 @@ public class Schedule implements Serializable {
                         return true;
                     }
                 }
-                if (!(event.isOverlapping(events.get(i + 1)) || event.isOverlapping(events.get(i)))) { // if the event doesn't overlap either of the other two events
-                    events.add(i + 1, event); // add the event between the other two events
-                    return true; // and return that the operation was successful
-                } else { // otherwise the event does overlap one of the other two events
-                    return false; // so the operation was unable to be completed
+                if (event.getStart().isBefore(events.get(i + 1).getStart()) && event.getStart().isAfter(events.get(i).getStart())) {
+                    if (!(event.isOverlapping(events.get(i + 1)) || event.isOverlapping(events.get(i)))) { // if the event doesn't overlap either of the other two events
+                        events.add(i + 1, event); // add the event between the other two events
+                        return true; // and return that the operation was successful
+                    } else { // otherwise the event does overlap one of the other two events
+                        return false; // so the operation was unable to be completed
+                    }
                 }
             }
         }

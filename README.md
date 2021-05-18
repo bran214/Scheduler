@@ -5,4 +5,4 @@ This is an application to model a Scheduler, similar to a standard calendar. How
 Scheduler.jar runs with the command "java --module-path (directory of javafx-sdk-.../lib/) --add-modules javafx.controls,javafx.fxml -Dfile.encoding=UTF-8 -jar (jarfile location)"
 
 ## Class Diagram
-![alt text](https://github.com/bran214/Scheduler/raw/main/Brainstorm/Class_Diagram.png "Class Diagram")  
+![alt text](https://github.com/bran214/Scheduler/raw/main/Brainstorm/Class_Diagram_updated.png "Class Diagram")  
